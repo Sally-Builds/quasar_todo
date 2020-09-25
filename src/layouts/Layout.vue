@@ -56,6 +56,16 @@
           v-bind="link"
           class="text-grey-4"
         />
+
+      <q-item v-if="$q.platform.is.electron" @click="quitApp" class="text-grey-4 absolute-bottom" clickable>
+        <q-item-section avatar>
+          <q-icon name="power_settings_new" />
+        </q-item-section>
+
+        <q-item-section>
+          <q-item-label>Quit</q-item-label>
+        </q-item-section>
+    </q-item>
       </q-list>
     </q-drawer>
 
@@ -95,7 +105,27 @@ export default {
     ...mapState('auth', ['loggedIn'])
   },
   methods: {
-    ...mapActions('auth', ['logoutUser'])
+    ...mapActions('auth', ['logoutUser']),
+    quitApp() {
+      this.$q.dialog({
+          title: 'Confirm',
+          message: 'Are you really sure you want to quit?',
+          cancel: {
+            color: 'negative'
+          },
+          ok: {
+            push: true,
+            color: 'primary'
+          },
+          persistent: true
+        }).onOk(() => {
+          console.log(this.$q.platform.is)
+          if(this.$q.platform.is.electron) {
+            console.log('electron')
+            require('electron').ipcRenderer.send('quit-app')
+          }
+        })
+    }
   }
 }
 </script>

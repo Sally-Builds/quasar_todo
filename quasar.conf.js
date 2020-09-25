@@ -174,6 +174,7 @@ module.exports = function (/* ctx */) {
         // osxSign: '',
         // protocol: 'myapp://path',
 
+        platform: 'win32'
         // Windows only
         // win32metadata: { ... }
       },
